@@ -5,19 +5,18 @@
 
 #include "prefix.h"
 
-uint32_t stack[32], tos=0, *dp=stack;
+uint64_t stack[32], tos=0, *dp=stack;
 struct rp { uint16_t w,p; } rstack[32]={{-1}}, ip={0,0}, *sp=rstack+1;
 
 void drop() { tos=*(--dp); }
 void ret() { ip=*(--sp); }
 void cmp() { *dp++=tos; tos=dp[-2]-tos; }
-void dot() { printf("%i ",tos); }
-void istack() {
-	printf("<");
-	uint32_t *p=stack;
-	for(;p<dp;p++) { printf("%i ",*p); }
-	printf("%i>",tos);
-}
+void dot() { printf("%li ",tos); fflush(stdout); }
+void istack() { printf("<"); uint64_t *p=stack; for(;p<dp;p++) { printf("%li ",*p); } printf("%li>",tos); fflush(stdout); }
+void fetch() { tos=*(uint64_t*)tos; }
+void store() { *(uint64_t*)tos=dp[-1]; }
+void add() { tos=*(--dp)+tos; }
+void sub() { tos=*(--dp)-tos; }
 
 void builtin(int w) {
 	if(w&0x400) {
@@ -32,6 +31,10 @@ void builtin(int w) {
 	case 3: cmp(); break;
 	case 4: dot(); break;
 	case 5: istack(); break;
+	case 6: fetch(); break;
+	case 7: store(); break;
+	case 8: add(); break;
+	case 9: sub(); break;
 	}
 }
 
@@ -43,6 +46,14 @@ void call(int w) {
 void jmp(int w) {
 	if(w&BLTIN) { ret(); builtin(w); return; }
 	ip.w=w; ip.p=0;
+}
+
+void address(int w) {
+	if(w&0x400) {
+		*dp++=tos;
+		tos=(uint64_t)&prog_numbers[w&0x3ff];
+		return;
+	}
 }
 
 void run() {
@@ -61,7 +72,7 @@ void run() {
 				}
 			}
 		}  else {
-			ret();
+			address(w);
 		}
 	}
 }

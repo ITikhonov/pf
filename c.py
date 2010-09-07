@@ -1,4 +1,4 @@
-bltin='; . drop ? n istack @ ! + -'.split()
+bltin='; . d ? n istack @ ! + -'.split()
 
 from sys import stdin
 
@@ -19,18 +19,22 @@ def makenum(w):
 
 for x in stdin:
 	w=x.split()
+	if not w: continue
 	df=[]
 	for x in w[1:]:
 		flags=[]
 		if '=' in x:
 			flags.append('JZ')
-			x=x.replace('=','')
+			x=x.replace('=','',1)
 		if len(x)>1 and '+' in x:
 			flags.append('JP')
-			x=x.replace('+','')
+			x=x.replace('+','',1)
 		if len(x)>1 and '-' in x:
 			flags.append('JN')
-			x=x.replace('-','')
+			x=x.replace('-','',1)
+		if len(x)>1 and '.' in x:
+			flags.append('JMP')
+			x=x.replace('.','',1)
 		if "'" in x:
 			flags.append('ZR')
 			x=x[1:]

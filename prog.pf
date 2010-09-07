@@ -1,2 +1,14 @@
-main 60 ? -print drop
-print drop drop n
+main opener closer printer
+
+opener 60 ? =open d d
+open depth @ 1 + depth ! d d
+
+closer 62 ? =close d d
+close depth @ 1 - =eject depth ! d d
+
+printer depth @ +.print
+print d .
+
+eject 10 . d
+
+depth '0
