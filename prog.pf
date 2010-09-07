@@ -1,1 +1,2 @@
-main . drop
+main 60 ? -print drop
+print drop drop n

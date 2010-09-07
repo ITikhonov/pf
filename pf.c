@@ -10,12 +10,28 @@ struct rp { uint16_t w,p; } rstack[32]={{-1}}, ip={0,0}, *sp=rstack+1;
 
 void drop() { tos=*(--dp); }
 void ret() { ip=*(--sp); }
+void cmp() { *dp++=tos; tos=dp[-2]-tos; }
+void dot() { printf("%i ",tos); }
+void istack() {
+	printf("<");
+	uint32_t *p=stack;
+	for(;p<dp;p++) { printf("%i ",*p); }
+	printf("%i>",tos);
+}
 
 void builtin(int w) {
+	if(w&0x400) {
+		*dp++=tos;
+		tos=prog_numbers[w&0x3ff];
+		return;
+	}
 	w&=0x7ff;
 	switch(w) {
 	case 1: putchar(tos); break;
 	case 2: drop(); break;
+	case 3: cmp(); break;
+	case 4: dot(); break;
+	case 5: istack(); break;
 	}
 }
 
@@ -36,7 +52,7 @@ void run() {
 		int w=i&0xfff;
 
 		if(i>>13) {
-			int cond=((i&JZ)&&tos==0) || ((i&JN)&&tos<0) || ((i&JP)&&tos>0);
+			int cond=((i&JZ)&&tos==0) || ((i&JN)&&(int32_t)tos<0) || ((i&JP)&&(int32_t)tos>0);
 			if(cond) {
 				switch(i&JMP) {
 				case CALL: call(w); break;
