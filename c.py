@@ -1,4 +1,4 @@
-bltin='; . d ? n istack @ ! + - choose'.split()
+bltin='; . , ? n istack @ ! + - choose nip'.split()
 
 from sys import stdin
 
@@ -23,7 +23,7 @@ for x in stdin:
 	df=[]
 	for x in w[1:]:
 		if x.startswith('#'):
-			x=x[:-1]+str(ord(x[-1]))
+			x=x[1:-1]+str(ord(x[-1]))
 		flags=[]
 
 		if '=' in x:

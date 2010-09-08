@@ -1,11 +1,27 @@
-main state @ n parse
-parse choose .inside .dinside .sinside .outside
+main . state @ parse prev !,
+parse choose .outside .inside .dinside .sinside
 
-inside 1 state !
-dinside 2 state !
-sinside 3 state !
-outside 0 state !
+outside , prev @ #< ? , , =tag
+tag 1 gostate #/ ? , =.close open
+
+inside , #" ? , =.dquote #' ? , =.squote #> ? , +-.; end
+
+end prev @ #/ ? , , =close 0 gostate
+
+dquote 2 gostate
+squote 3 gostate
+
+dinside , #" ? , +-.; 1 gostate
+sinside , #' ? , +-.; 1 gostate
+
+gostatep #[ . , n depth @ n , #] . , 10 . , state !,
+gostate state !,
+
+close #C . , depth @ 1 - n depth !, 
+open #O . , depth @ 1 + n depth !,
 
 state '0
 prev '0
+depth '0
 
+!, ! , ,
