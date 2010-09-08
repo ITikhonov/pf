@@ -29,16 +29,16 @@ for x in stdin:
 		if '=' in x:
 			flags.append('JZ')
 			x=x.replace('=','',1)
-		if len(x)>1 and '+' in x:
+		if len(x)>1 and '+' in x[:-1]:
 			flags.append('JP')
 			x=x.replace('+','',1)
-		if len(x)>1 and '-' in x:
+		if len(x)>1 and '-' in x[:-1]:
 			flags.append('JN')
 			x=x.replace('-','',1)
-		if len(x)>1 and '.' in x:
+		if len(x)>1 and '.' in x[:-1]:
 			flags.append('JMP')
 			x=x.replace('.','',1)
-		if "'" in x:
+		if "'" in x[:-1]:
 			flags.append('ZR')
 			x=x[1:]
 		if flags and flags!=['JMP']:
