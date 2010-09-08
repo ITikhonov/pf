@@ -17,6 +17,7 @@ void fetch() { tos=*(uint64_t*)tos; }
 void store() { *(uint64_t*)tos=dp[-1]; }
 void add() { tos=*(--dp)+tos; }
 void sub() { tos=*(--dp)-tos; }
+void choose() { ip.p+=tos; }
 
 void builtin(int w) {
 	if(w&0x400) {
@@ -35,6 +36,7 @@ void builtin(int w) {
 	case 7: store(); break;
 	case 8: add(); break;
 	case 9: sub(); break;
+	case 10: choose(); break;
 	}
 }
 

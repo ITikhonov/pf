@@ -1,4 +1,4 @@
-bltin='; . d ? n istack @ ! + -'.split()
+bltin='; . d ? n istack @ ! + - choose'.split()
 
 from sys import stdin
 
@@ -22,7 +22,10 @@ for x in stdin:
 	if not w: continue
 	df=[]
 	for x in w[1:]:
+		if x.startswith('#'):
+			x=x[:-1]+str(ord(x[-1]))
 		flags=[]
+
 		if '=' in x:
 			flags.append('JZ')
 			x=x.replace('=','',1)
@@ -38,10 +41,11 @@ for x in stdin:
 		if "'" in x:
 			flags.append('ZR')
 			x=x[1:]
-		if flags:
+		if flags and flags!=['JMP']:
 			f='|'.join(flags)
 		else:
-			f='JP|JN|JZ'
+			if flags: f='JP|JN|JZ|JMP'
+			else: f='JP|JN|JZ'
 
 		if x in bltin:
 			df.append("%s|CALL|BLTIN|%u"%(f,bltin.index(x)))

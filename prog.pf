@@ -1,14 +1,11 @@
-main opener closer printer
+main state @ n parse
+parse choose .inside .dinside .sinside .outside
 
-opener 60 ? =open d d
-open depth @ 1 + depth ! d d
+inside 1 state !
+dinside 2 state !
+sinside 3 state !
+outside 0 state !
 
-closer 62 ? =close d d
-close depth @ 1 - =eject depth ! d d
+state '0
+prev '0
 
-printer depth @ +.print
-print d .
-
-eject 10 . d
-
-depth '0
